@@ -14,25 +14,21 @@ function Configuration() {}
  */
 //Real
 Configuration.twilio = {
-    accountSid: "AC7baa77ba96a22f856bfb2d3da175c5fc",
-    authToken: "f3318d6fec3c77879c1e6f1e577fc466",
-    sendingNumber: "+13156794394"
+    accountSid: "",
+    authToken: "",
+    sendingNumber: ""
 };
 //Test
-// Configuration.twilio = {
-//     accountSid: "ACb0901085ccbf750e0839cb24229ef5b6",
-//     authToken: "2a761f3385aa7e1ed6c2696e5a456392",
-//     sendingNumber: "+19726656328"
-// };
+
 
 Configuration.awsEmailSender = {
-    region: 'us-west-2',
-    accessKeyId: 'AKIAI6WC3LPCO6DMZFPQ',
-    secretAccessKey: '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'
+    region: '',
+    accessKeyId: '',
+    secretAccessKey: ''
 
 };
 
-Configuration.send_mail = "andersson1117@gmail.com";
+Configuration.send_mail = "";
 
 Configuration.appstoreUrl = "https://itunes.apple.com/us/app/dealspl.us-coupons/id496056416?mt=8";
 Configuration.googleUrl = "https://itunes.apple.com/us/app/dealspl.us-coupons/id496056416?mt=8";

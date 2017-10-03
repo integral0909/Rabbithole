@@ -45,14 +45,7 @@ passport.use('local-facebook', new LocalStrategy({
     Account.findUserByFacebookId(facebookId).then(account => {
         //account exists
         if(account) {
-            return done(null, {
-                    _id: account._id.toString(),
-                    type: account.type,
-                    common_profile: account.common_profile,
-                    user_setting: account.user_setting,
-                    username: account.username,
-                    o_auth: account.o_auth
-                }, "1");
+            return done(null, ResponseResult.customizedUserInfo(account), "1");
         }else {
 
             const newAccount = new Account();
@@ -65,14 +58,7 @@ passport.use('local-facebook', new LocalStrategy({
             if(req.body.avatar) newAccount.common_profile.avatar = req.body.avatar;
 
             newAccount.save().then(doc => {
-                return done(null, {
-                    _id: doc._id.toString(),
-                    type: doc.type,
-                    common_profile: doc.common_profile,
-                    user_setting: doc.user_setting,
-                    username: doc.username,
-                    o_auth: doc.o_auth
-                }, null);
+                return done(null, ResponseResult.customizedUserInfo(account), null);
             })
            
         }
