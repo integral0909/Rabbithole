@@ -42,25 +42,36 @@ passport.use('local-facebook', new LocalStrategy({
 
     let deviceToken = req.body.deviceToken;
     let platform = req.body.platform;
+    let longitude = req.body.long;
+    let latitude = req.body.lat;
     Account.findUserByFacebookId(facebookId).then(account => {
         //account exists
         if(account) {
-            return done(null, ResponseResult.customizedUserInfo(account), "1");
+            account.device_token = deviceToken;
+            account.platform = platform;
+            account.newUser = false;
+            if(req.body.long) account.common_profile.location.long = req.body.long;
+            if(req.body.lat) account.common_profile.location.lat = req.body.lat;
+            account.save().then(doc => {
+                return done(null, ResponseResult.customizedUserInfo(doc), "1");
+            });          
         }else {
-
             const newAccount = new Account();
             newAccount.type = "facebook";
             newAccount.o_auth.facebook.id = facebookId;
             newAccount.device_token = deviceToken;
             newAccount.platform = platform;
+            newAccount.newUser = true;
+            newAccount.username = username;
+            if(req.body.long) newAccount.common_profile.location.long = req.body.long;
+            if(req.body.lat) newAccount.common_profile.location.lat = req.body.lat;
             if(req.body.gender) newAccount.common_profile.gender = req.body.gender;
             if(req.body.email) newAccount.common_profile.email = req.body.email;
             if(req.body.avatar) newAccount.common_profile.avatar = req.body.avatar;
 
             newAccount.save().then(doc => {
-                return done(null, ResponseResult.customizedUserInfo(account), null);
-            })
-           
+                return done(null, ResponseResult.customizedUserInfo(doc), null);
+            });           
         }
     });
 

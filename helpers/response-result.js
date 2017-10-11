@@ -18,13 +18,16 @@ function customizedUserInfo(doc) {
     var result  = {
         _id: doc._id.toString(),
         type: doc.type,
+        username: doc.username,
         email: doc.common_profile.email,
         gender: doc.common_profile.gender,
+        newUser: doc.newUser,
+        isFlagged: doc.isFlagged,
         firstName: doc.common_profile.firstName,
         lastName: doc.common_profile.lastName,
         location: doc.common_profile.location,
         facebookId: doc.o_auth.facebook.id,
-        avatar:doc.common_profile.avatar
+        avatar: doc.common_profile.avatar
     };
 
     return result;

@@ -7,10 +7,12 @@ const type = "facebook email".split(' ');
 
 const Account = new Schema({
     type : {type: String, enum : type},    
-    username: String,
+    username: {type: String, default: 'none'},
+    newUser: { type: Boolean, default: false },
+    isFlagged: {type: Boolean, default: false},
     device_token:String,
     platform: {type: Number, required: true,default: 1}, //  1: iOS , 2: Android , 3: Web
-    common_profile: {
+    common_profile: {        
         phone_number: String,
         email: String,
         firstName: { type: String, default: "" },
@@ -32,18 +34,24 @@ const Account = new Schema({
             id: String,
             access_token: String
         }
-    }
+    },
+    fbFriends: [{
+        id: String,
+        firstname: { type: String, default: "" },
+        lastname: { type: String, default: "" },
+        name: { type: String, default: '' },
+        picture: { type: String, default: 'none' },
+    }]
+
 });
 
 // Static methods
 
 Account.statics.findUser = function(username) {
-
     return this.findOne({'username': username}).exec();
 }
 
 Account.statics.unregister = function(accountId) {
-
     return this.remove({_id: accountId}).exec();
 }
 
@@ -60,7 +68,6 @@ Account.methods.validPassword = function(password) {
 };
 
 Account.statics.search = function(username) {
-
     console.log("q : = : ", username);
     const re = new RegExp(username, "i");
     return this.find(
