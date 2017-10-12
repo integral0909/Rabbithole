@@ -10,6 +10,7 @@ const Account = new Schema({
     username: {type: String, default: 'none'},
     newUser: { type: Boolean, default: false },
     isFlagged: {type: Boolean, default: false},
+    isVerified: {type: Boolean, default: false},
     device_token:String,
     platform: {type: Number, required: true,default: 1}, //  1: iOS , 2: Android , 3: Web
     common_profile: {        
@@ -63,9 +64,19 @@ Account.statics.findUserByFacebookId = function(id) {
     return this.findOne({ 'o_auth.facebook.id' : id });
 }
 
+Account.statics.findUserByGender = function(gender) {
+    return this.findOne({'common_profile.gender' : gender }).exec();
+}
+
 Account.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 };
+
+//Count of female users
+
+Account.statics.countOfSpecialGenderUsers = function(gender) {
+    return this.count({'common_profile.gender': gender}).exec();
+}
 
 Account.statics.search = function(username) {
     console.log("q : = : ", username);

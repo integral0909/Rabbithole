@@ -19,7 +19,7 @@ router.post('/update_fbFriends', (req, res, next) => {
 
     Account.findByIdAndUpdate(userId,
         {
-            $set: {username: username, isFlagged: isFlagged},
+            $set: {username: username, isFlagged: isFlagged, isVerified: true},
             $push: { fbFriends: { $each: friends}}
         },
         {safe: true, upsert: true, new: true, multi: true }).then (account =>{
@@ -31,4 +31,17 @@ router.post('/update_fbFriends', (req, res, next) => {
     });
        
 });
+
+/**
+ * Get count of female users
+ */
+
+ router.post('/female_count', (req, res, next) => {
+    const userId = req.body.user_id;
+    Account.countOfSpecialGenderUsers(0).then((count) => {
+        console.log("Number of users : ", count);
+        res.json(ResponseResult.getResoponseResult({count: count}, 1, "success"));        
+    });
+ });
+
 module.exports = router;

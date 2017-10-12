@@ -23,6 +23,7 @@ function customizedUserInfo(doc) {
         gender: doc.common_profile.gender,
         newUser: doc.newUser,
         isFlagged: doc.isFlagged,
+        isVerified: doc.isVerified,
         firstName: doc.common_profile.firstName,
         lastName: doc.common_profile.lastName,
         location: doc.common_profile.location,
