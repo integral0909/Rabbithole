@@ -24,11 +24,11 @@ const Account = new Schema({
         location: {
             lat: {type: Number, default: 0 },
             long: {type: Number, default: 0 }
-        },
-        zipCode: String,
-        city: {type: String}
+        },        
     }, 
     user_setting: {
+        zipCode: String,
+        city: {type: String}
     },
     o_auth: {
         facebook:{

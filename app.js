@@ -54,7 +54,8 @@ function RabbitHole(config) {
         //
 
         app.use(logger('dev'));
-        app.use(bodyParser.json());
+        
+        app.use(bodyParser.json({limit: '50mb'}));
         app.use(bodyParser.urlencoded({ extended: false }));
         app.use(cookieParser());
         app.use(session({
