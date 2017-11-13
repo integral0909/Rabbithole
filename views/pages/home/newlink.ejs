@@ -1,0 +1,191 @@
+
+<% include ../../html/html_begin %>
+<% include ../../html/head_begin %>
+<% include ../../html/head_end %>
+<% include ../../html/body_begin %>
+			<!-- ============================================================== -->
+			<!-- Start right Content here -->
+			<!-- ============================================================== -->
+			<div class="content-page">
+				<!-- Start content -->
+				<div class="content">
+					<div class="container">
+                            <div class="row">
+                                    <div class="col-sm-10">
+                                        <div class="card-box">
+                                                <!-- <% if (locals.message) { %>
+                                                    <div class="alert alert-danger" id="forgotval" style="display: block;">
+                                                        <p><%= message %></p>
+                                                    </div>
+                                                <% } %> -->
+                                                <% if (messages.info) { %>
+                                                    <div class="alert alert-danger" id="successMessage" style="display: block;">
+                                                        <p><%= messages.info %></p>
+                                                    </div>
+                                                <% } %>
+                                            <h4 class="m-t-0 m-b-30 header-title"><b>User Registration</b></h4>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h5><b>Please enter all info.</b></h5>                                           
+                                                    <form class="form-horizontal group-border-dashed" action="/api/v1/test_register/" method="post">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">Username:</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" id="username" name="username" class="form-control" required placeholder="Type username" />
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">DeviceToken</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" id="device_token" name="device_token" class="form-control" required placeholder="Device token(random string)" />
+                                                            </div>                                    
+                                                        </div>
+                                                        
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">E-Mail:</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="email" id="email" name="email" class="form-control" required parsley-type="email" placeholder="Enter a valid e-mail" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">URL:</label>
+                                                            <div class="col-sm-6">
+                                                                <input parsley-type="url" id="avatar" name="avatar" type="url" class="form-control" required placeholder="Photo url(eg:http://pictures.ozy.com/pictures/600x337/4/5/9/94459_gettyimages460102914.jpg)" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">Facebook ID:</label>
+                                                            <div class="col-sm-6">
+                                                                <input data-parsley-type="digits" id="facebookId" name="facebookId" type="text" class="form-control" required placeholder="Enter facebook ID(random)" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">Gender:</label>
+                                                            <div class="col-sm-3">
+                                                                    <select class="selectpicker" id="gender" name="gender" data-style="btn-success btn-custom">
+                                                                        <option value="1">Male</option>
+                                                                        <option value="0">Female</option>                                                                    </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                                <label class="col-sm-3 control-label">Looking for:</label>
+                                                                <div class="col-sm-3">
+                                                                        <select class="selectpicker" id="gender" name="show" data-style="btn-success btn-custom">
+                                                                            <option value="1">Male</option>
+                                                                            <option value="0">Female</option>
+                                                                            <option value="2">Both</option>                
+                                                                        </select>
+                                                                </div>
+                                                            </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">Latitude:</label>
+                                                            <div class="col-sm-6">
+                                                                <input data-parsley-type="number" type="text" name="lat" class="form-control" placeholder="Enter your latitude(eg: -34.568582)" />
+                                                            </div>
+                                                        </div>        
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">Longitude:</label>
+                                                            <div class="col-sm-6">
+                                                                <input data-parsley-type="number" type="text" name="long" class="form-control" placeholder="Enter your longitude(eg: -34.568582)" />
+                                                            </div>
+                                                        </div>                                        
+                                                        <div class="form-group">
+                                                            <div class="col-sm-offset-3 col-sm-9 m-t-15">
+                                                                <button type="submit" class="btn btn-primary">
+                                                                    Submit
+                                                                </button>
+                                                                <button type="reset" class="btn btn-default m-l-5">
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+						    
+            		</div> <!-- container -->
+                               
+                </div> <!-- content -->
+
+                <footer class="footer">
+                    © 2017. All rights reserved.
+                </footer>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+            
+            
+        <% include ../../components/footer %>
+<% include ../../html/body_end %>
+<script language = "JavaScript" >
+                 function changeSwitcheryState(el,value){
+                    if($(el).is(':checked')!=value){
+                        $(el).trigger("click")
+                    }
+                }
+                
+                 $(document).ready(function(){
+
+                    setTimeout(function() {
+                        $('#successMessage').fadeOut('fast');
+                    }, 3000); // <-- time in milliseconds                        
+                    $('#linkDataSaveButton').click(function(){
+                         var keywordValues = $('#keywordSelect').val() || [];
+                        var categoryValues = $('#categorySelect').val()  || [];
+                        var sourceValues = $('#sourceSelect').val()  || [];
+                        var startDate = $('#startDateInputField').val() || new Date();
+                        var endDate = $('#endDateInputField').val() || new Date();
+                        var alert = false;
+                        if ($('.switch').is(':checked')) {
+                            alert = true;
+                        }
+
+                        console.log(alert);
+
+                        if (keywordValues.length == 0 && categoryValues.length == 0 && sourceValues.length == 0 && !startDate && !endDate) {
+
+                            console.log("Please input one field at least.");
+                            return;
+                        }
+
+                        var parameter = {
+
+                            "id": linkId,
+                            "keywords": keywordValues,
+                            "categories": categoryValues,
+                            "sources": sourceValues,
+                            "start_date": startDate,
+                            "end_date": endDate,
+                            "alert": alert
+                        };
+
+                        console.log("parameter id is ::::::" + JSON.stringify(parameter));
+                        $.ajax({
+                            type:'POST',
+                            data: JSON.stringify(parameter),
+                            contentType:'application/json',
+                            url:'/pages/newlink/update',
+                            error: function(error) {
+                                alert("error is occurred=="+error);
+                            },
+                            dataType:'json',
+                            success: function(data) {
+
+                                console.log(data);
+                                window.location.href = '/pages/links';
+                            },
+                        });
+                    });
+
+                   
+                 });
+
+            </script>    
+<% include ../../html/html_end %>

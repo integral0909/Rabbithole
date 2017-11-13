@@ -1,0 +1,243 @@
+<% include ../../html/html_begin %>
+<% include ../../html/head_begin %>
+
+<!-- Pull video Data -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <script>
+            window.onload = function() {loadAllVideos()};
+
+            $('.logo_image').css('margin-left', 0);
+            
+            function loadAllVideos() {
+
+                 var ref = $(location).attr('search');
+                 var data = JSON.stringify( {
+                           "query": {
+                                "match_all": {}
+                                }
+                 });
+
+                 if (!isEmpty(ref)) {
+
+                     var arr = ref.split('=');
+                     var query = arr[1];
+                     console.log('path is ...'+ query);
+
+                     data = JSON.stringify( {
+                            "query": {
+                                "match": {
+                                    "content": {
+                                        "query": query
+                                    }
+                                }
+                            }
+                    });
+                 }            
+
+                 
+
+                 $.ajax({
+
+                        url: '//ec2-54-210-169-119.compute-1.amazonaws.com:9200/news/clip/_search?pretty',
+                        data: data,
+                        contentType:"application/json",
+                        error: function(error) {
+                            alert("error is occurred=="+error);
+                        },
+                        dataType:'json',
+                        success: function(data) {
+
+                            console.log("data is ---" + data['took']);
+
+                            createVideoList(data);
+                        },
+                        type:'POST'
+
+                    });
+            }
+            $(document).ready(function(){
+                var searchQuery;               
+                
+                $("#submitButton").click(function(){
+                    searchQuery=$("#search").val();
+
+                    console.log("searchquery is --- " + searchQuery);
+                    // $.post("http://ec2-54-210-169-119.compute-1.amazonaws.com:9200/news/clip/_search?pretty",{"query": {"match": {"content": {"query": "donald trump"}}}}, function(data){
+                    //     console.log("data is ---" + data);
+                    // });
+                    
+                    $.ajax({
+
+                        url: '//ec2-54-210-169-119.compute-1.amazonaws.com:9200/news/clip/_search?pretty',
+                        data: JSON.stringify( {
+                            "query": {
+                                "match": {
+                                    "content": {
+                                        "query": searchQuery
+                                    }
+                                }
+                            }
+                        }),
+                        contentType:"application/json",
+                        error: function(error) {
+                            alert("error is occurred=="+error);
+                        },
+                        dataType:'json',
+                        success: function(data) {
+
+                            console.log("data is ---" + data['took']);
+
+                            createVideoList(data);
+                        },
+                        type:'POST'
+
+                    });
+
+                });
+            });
+
+            function isEmpty(value) {
+                return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+            }
+
+            function Video(fileName, postDate, feedName, feedType) {
+
+                this.fileName = fileName;
+
+                var date = new Date(postDate);
+                
+                this.postDate = moment(date).format("MMM Do YY");
+                this.feedName = feedName;
+                this.feedType = feedType;
+            }
+
+            function createVideoList(data){
+
+                $("#videoListContent").empty();
+                var hits = data['hits'];
+                console.log("Count is == "+ hits["hits"].length);
+
+                for (var i = 0; i < hits["hits"].length ; i++) {
+
+                    
+                    var object = (hits["hits"])[i];
+                    var source = object["_source"];
+                    var video = new Video(source["fileName"], source["postDate"], source["feedName"], source["feedType"]);
+
+                    var div = "<div class='col-sm-6 col-lg-4 col-md-4 mobiles'> <div class='product-list-box thumb'><div><a href='' class='logo'><img src='../images/bloombergwhitelogo.png' height='30' class='logo_image'/></a></div><a href='javascript:void(0);' class='image-popup' title='Screenshot-1'> <div class='embed-responsive embed-responsive-4by3'> <video class='embed-responsive-item' controls> <source src = 'http://dzjqwg2rswren.cloudfront.net/News/"+video.fileName+"' type = 'video/mp4'> </video> </div> </a> <div class='detail'> <h4 class='m-t-0'><a href='' class='text-dark'>"+video.feedName+"</a> <small>"+video.postDate+"</small></h4></div> </div> </div>";
+
+                    $("#videoListContent").append(div);
+                }
+
+            }
+
+         </script>
+
+<% include ../../html/head_end %>
+<% include ../../html/body_begin %>
+    <% include ../../components/topbar %>
+    <% include ../../components/site_menubar %>
+    <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->                      
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-9">
+                                 <!-- SECTION FILTER
+                                ================================================== -->
+                                <div class="row m-t-10 m-b-10">
+
+                                    <div class="col-sm-6">
+                                        <form role="form" id = "searchForm" >
+                                            <div class="form-group contact-search m-b-0">
+                                                <input type="text" id="search" class="form-control product-search" placeholder="Search here...">
+                                                <button type="button" class="btn btn-white" id = "submitButton"><i class="fa fa-search"></i></button>
+                                            </div> <!-- form-group -->
+                                        </form>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="h5 m-0 text-right">
+                                            <label class="vertical-middle m-r-10">Sort By:</label>
+                                            <div class="btn-group vertical-middle" data-toggle="buttons">
+                                                <label class="btn btn-default btn-md waves-effect active">
+                                                    <input type="radio" autocomplete="off" checked=""> Status
+                                                </label>
+                                                <label class="btn btn-default btn-md waves-effect">
+                                                    <input type="radio" autocomplete="off"> Type
+                                                </label>
+                                                <label class="btn btn-default btn-md waves-effect">
+                                                    <input type="radio" autocomplete="off"> Name
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row" id = "videoListContent">
+                                <!--
+                                    <div class="m-b-15">
+                                        <div class="col-sm-6 col-lg-3 col-md-4 mobiles">
+                                            <div class="product-list-box thumb">
+                                                <a href="javascript:void(0);" class="image-popup" title="Screenshot-1">
+                                                    <div class="embed-responsive embed-responsive-4by3">
+                                                        <iframe class="embed-responsive-item" src="http://player.vimeo.com/video/69988283?color=5fbeaa&amp;title=0&amp;byline=0&amp;portrait=0"></iframe>
+                                                    </div>
+                                                </a>
+                                                <div class="detail">
+                                                    <h4 class="m-t-0"><a href="" class="text-dark">Samsung Gallaxy</a> <small>12 Dec 2016</small></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div> <!-- End row -->
+                            </div>
+
+                            <div class="col-sm-3">
+                            
+                            
+                            </div>
+                        
+                        </div>
+                        <!-- Page-Title 
+						<div class="row">
+							<div class="col-sm-12">
+								<h4 class="page-title">Products</h4>
+								<ol class="breadcrumb">
+									<li>
+										<a href="#">Ubold</a>
+									</li>
+									<li class="active">
+										Products
+									</li>
+								</ol>
+							</div>
+						</div> -->
+
+                       
+
+
+
+
+                    </div> <!-- container -->
+                               
+                </div> <!-- content -->
+
+                <footer class="footer text-right">
+                    © 2017. All rights reserved.
+                </footer>
+
+            </div>
+            
+            
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+
+    <% include ../../components/footer %>
+<% include ../../html/body_end %>
+<% include ../../html/html_end %>

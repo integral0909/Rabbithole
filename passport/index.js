@@ -50,8 +50,9 @@ passport.use('local-facebook', new LocalStrategy({
             account.device_token = deviceToken;
             account.platform = platform;
             account.newUser = false;
-            if(req.body.long) account.common_profile.location.long = req.body.long;
-            if(req.body.lat) account.common_profile.location.lat = req.body.lat;
+            
+            if(req.body.lat && req.body.long) 
+                account.common_profile.location = {'type': 'Point', 'coordinates': [req.body.long, req.body.lat]};
             account.save().then(doc => {
                 return done(null, ResponseResult.customizedUserInfo(doc), "1");
             });          
@@ -63,8 +64,8 @@ passport.use('local-facebook', new LocalStrategy({
             newAccount.platform = platform;
             newAccount.newUser = true;
             newAccount.username = username;
-            if(req.body.long) newAccount.common_profile.location.long = req.body.long;
-            if(req.body.lat) newAccount.common_profile.location.lat = req.body.lat;
+            if(req.body.lat && req.body.long) 
+                newAccount.common_profile.location = {'type': 'Point', 'coordinates': [req.body.long, req.body.lat]};
             if(req.body.gender) newAccount.common_profile.gender = req.body.gender;
             if(req.body.email) newAccount.common_profile.email = req.body.email;
             if(req.body.avatar) newAccount.common_profile.avatar = req.body.avatar;

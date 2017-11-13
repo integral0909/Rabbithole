@@ -22,13 +22,25 @@ const Account = new Schema({
         avatar: { type: String, default: 'none' },
         age: {type: Number, min: 18, max: 65 },
         location: {
-            lat: {type: Number, default: 0 },
-            long: {type: Number, default: 0 }
+            type: {type: String, default: 'Point'},
+            coordinates: [Number]
         },        
     }, 
-    user_setting: {
-        zipCode: String,
-        city: {type: String}
+    user_settings: {
+        zipCode: { type: String, default: "" },
+        city: { type: String, default: "" },
+        maxDistance: {type: Number, default: 100},
+        age: {
+            min: { type: Number, min: 18, max: 50, default: 18},
+            max: {type: Number, min: 18, max: 50, default: 50}
+        },
+        enabled_discovery: {type: Boolean, default: true},
+        enabled_notification: {type: Boolean, default: true},
+        enabled_newMessages: {type: Boolean, default: true},
+        enabled_newMatches: {type: Boolean, default: true},
+        enabled_discreetNotifications: {type: Boolean, default: true},
+        use_myLocation: {type: Boolean, default: true},
+        show: {type: Number, default: 0} // 0: only women, 1: only men, 2: both of men and women 
     },
     o_auth: {
         facebook:{
@@ -77,6 +89,23 @@ Account.methods.validPassword = function(password) {
 Account.statics.countOfSpecialGenderUsers = function(gender) {
     return this.count({'common_profile.gender': gender}).exec();
 }
+
+// Case 1: Find match users : gender -> gender , show -> show
+Account.statics.findMatchedUsersInCaseOne = function(value) {
+    return this.find({
+        $and: [{'common_profile.gender' : value}, {'user_settings.show': value}]
+    })
+    .exe();
+}
+// Case 2: Find match users : gender -> 1-gender , show -> show
+Account.statics.findMatchedUsersInCaseTwo = function(value) {
+    return this.find({
+        $and: [{'common_profile.gender' : 1 - value}, {'user_settings.show': value}]
+    })
+    .exec();
+}
+
+// Find User by
 
 Account.statics.search = function(username) {
     console.log("q : = : ", username);

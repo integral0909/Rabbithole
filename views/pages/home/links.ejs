@@ -1,0 +1,506 @@
+<% include ../../html/html_begin %>
+<% include ../../html/head_begin %>
+<% include ../../html/head_end %>
+<% include ../../html/body_begin %>
+    <% include ../../components/topbar %>
+    <% include ../../components/site_menubar %>
+	<% include ../../components/site_gridmenu %>
+    <!-- Page -->
+                            <!--Basic Columns-->
+						<!--===================================================-->
+						
+						
+						
+						
+						<!--Checkbox Select-->
+						<!--===================================================-->
+						<div class="row">
+							<div class="col-sm-8">
+								<div class="card-box">
+									<h4 class="m-t-10 header-title"><b>YOUR LINKS</b></h4>		
+                                    <button id = "remove" class = "btn btn-danger"  disabled><i class="fa fa-times m-r-5">
+                                        </i>Delete</button> 							
+									<table 
+                                           data-toolbar = "#remove"
+										   data-page-size="10"
+										   data-pagination="true"
+                                           data-id-field= "id"
+                                           data-page-list="[10,25,50,100, ALL]"
+                                           class="table-bordered table" id="demo-custom-toolbar">
+										<thead>
+											<tr>
+												<th data-field="state" data-checkbox="true"></th>
+                                                <th data-field="id" class = "linkId hidden" ></th>
+												<th data-field="title" data-switchable="false" data-formatter="invoiceFormatter">Title</th>
+												<th data-field="date">Date</th>												
+												<th data-field="action" 
+                                                    data-events="actionEvents"
+                                                    data-formatter="actionFormatter"
+                                                    data-align="center">Action</th>
+                                                
+											</tr>
+										</thead>								
+										
+									<!-- <tbody id = "searchTblBody">
+																						
+										</tbody> -->
+									</table>
+								</div>
+							</div>
+						</div>
+                    </div> <!-- container -->
+                               
+                </div> <!-- content -->
+
+                <footer class="footer">
+                    © 2017. All rights reserved.
+                </footer>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+            <!-- Right Sidebar -->
+            <div class="side-bar right-bar nicescroll">
+                <h4 class="text-center">Chat</h4>
+                <div class="contact-list nicescroll">
+                    <ul class="list-group contacts-list">
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-1.jpg" alt="">
+                                </div>
+                                <span class="name">Chadengle</span>
+                                <i class="fa fa-circle online"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-2.jpg" alt="">
+                                </div>
+                                <span class="name">Tomaslau</span>
+                                <i class="fa fa-circle online"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-3.jpg" alt="">
+                                </div>
+                                <span class="name">Stillnotdavid</span>
+                                <i class="fa fa-circle online"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-4.jpg" alt="">
+                                </div>
+                                <span class="name">Kurafire</span>
+                                <i class="fa fa-circle online"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-5.jpg" alt="">
+                                </div>
+                                <span class="name">Shahedk</span>
+                                <i class="fa fa-circle away"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-6.jpg" alt="">
+                                </div>
+                                <span class="name">Adhamdannaway</span>
+                                <i class="fa fa-circle away"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-7.jpg" alt="">
+                                </div>
+                                <span class="name">Ok</span>
+                                <i class="fa fa-circle away"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-8.jpg" alt="">
+                                </div>
+                                <span class="name">Arashasghari</span>
+                                <i class="fa fa-circle offline"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-9.jpg" alt="">
+                                </div>
+                                <span class="name">Joshaustin</span>
+                                <i class="fa fa-circle offline"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="../assets/images/users/avatar-10.jpg" alt="">
+                                </div>
+                                <span class="name">Sortino</span>
+                                <i class="fa fa-circle offline"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /Right-bar -->
+    <!-- End Page -->
+
+    <!-- Modal -->
+
+    <div id="edit-modal" class="modal-demo">
+        <button type="button" class="close" onclick="Custombox.close();">
+            <span>&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="custom-modal-title">Edit Search</h4>
+        <div class="custom-modal-text text-left">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card-box">
+                        <h4 class="m-t-0 m-b-20 header-title"> <b>Alert</b> 
+                            <span>
+                                
+                                    <input type="checkbox" checked data-plugin="switchery" data-color="#f05050"/>
+                                    
+                            </span>
+                        </h4>
+                        <!-- Keywords -->
+                        <div class="row top30">										
+                            <div class="col-sm-12 col-xs-offset-1">
+
+                                <div class = "col-xs-3 col-sm-2">
+                                    <h5><b>Keywords</b></h5>
+                                </div>
+                                <div class = "clearfix visible-xs-block"> </div>
+                                <div class="m-b-0 col-xs-7 col-sm-7">
+                                    <select multiple data-role="tagsinput" id = "keywordSelect">
+                                        
+                                    </select>
+                                </div>
+
+                            </div>										
+                        </div><!-- Keywords  End -->
+                        <!-- =========================== -->
+                        <!--  Category  -->
+
+                        <div class="row top30">										
+                            <div class="col-sm-12 col-xs-offset-1">
+
+                                <div class = "col-xs-3 col-sm-2">
+                                    <h5><b>Category</b></h5>
+                                </div>
+                                <div class = "clearfix visible-xs-block"> </div>
+                                <div class="m-b-0 col-xs-7 col-sm-7">
+                                    <select multiple data-role="tagsinput" id = "categorySelect">
+                                        <!--<option value="Amsterdam">Amsterdam</option>
+                                        <option value="Washington">Washington</option>
+                                        <option value="Sydney">Sydney</option> -->
+                                    </select>
+                                </div>
+
+                            </div>										
+                        </div><!--  Category End -->
+                        <!-- =========================== -->
+                        <!--  Date  -->
+
+                        <div class="row top30">										
+                            <div class="col-sm-12 col-xs-offset-1">
+                                <div class = "col-xs-3 col-sm-2">
+                                    <h5><b>Date</b></h5>
+                                </div>
+                                <div class = "clearfix visible-xs-block"> </div>
+                                <div class="col-sm-8">
+                                    <div class="input-daterange input-group" id="date-range">
+                                        <input type="text" class="form-control" name="start" id = "startDateInputField"/>
+                                        <span class="input-group-addon bg-custom b-0 text-white">to</span>
+                                        <input type="text" class="form-control" name="end" id = "endDateInputField"/>
+                                    </div>
+                                </div>
+                                <!--<form action="#" class="form-horizontal">
+                                        
+                                        
+                                    </form> -->
+
+                            </div>										
+                        </div><!--  Date End -->
+                        <!-- =========================== -->
+                        <!--  Source  -->
+
+                        <div class="row top30">										
+                            <div class="col-sm-12 col-xs-offset-1">
+
+                                <div class = "col-xs-3 col-sm-2">
+                                    <h5><b>Source</b></h5>
+                                </div>
+                                <div class = "clearfix visible-xs-block"> </div>
+                                <div class="m-b-0 col-xs-7 col-sm-7">
+                                    <select multiple data-role="tagsinput" id = "sourceSelect">
+                                        
+                                    </select>
+                                </div>
+
+                            </div>										
+                        </div><!--  Source End -->
+                        <!-- =========================== -->
+                        <!--  Submit Buttons  -->
+
+                        <div class="row top60">										
+                            <div class="col-sm-12 col-xs-offset-1">
+
+                                <div class = "col-xs-3 col-sm-2">
+                                    <h5><b></b></h5>
+                                </div>
+                                <div class = "clearfix visible-xs-block"> </div>
+                                <div class="m-b-0 col-xs-7 col-sm-7">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light" id = "linkDataSaveButton" >Submit</button>
+                                    <button type="button" class="btn btn-default waves-effect waves-light">Cancel</button>
+                                </div>
+
+                            </div>										
+                        </div><!--  Source End -->
+
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+
+    <% include ../../components/footer %>
+<% include ../../html/body_end %>
+
+<script language = "JavaScript" >
+
+    var $table = $('#demo-custom-toolbar'), 
+        $remove = $('#remove'),
+        selections = [];
+
+    var selectedLinkId = '';
+
+    function invoiceFormatter(value, row) {
+        return '<a href="/pages/home?title='+ value +'" class="btn-link" >' + value + '</a>';
+    }
+
+    function actionFormatter(value, row, index) {
+
+        return [
+            '<a href="#" class="edit">',
+            '<i class="md md-edit"></i>',
+            '</a>',
+            '<a href="#" class="remove">',
+            '<i class="md md-close"></i>',
+            '</a>'
+            ].join('');
+    }
+
+    window.actionEvents = {
+        'click .edit' : function (e,value, row, index) {
+
+            // Custombox.open({
+            //     target:'#edit-modal',
+            //     effect: 'fadein'
+            // });
+            localStorage.setItem('link', row.title);
+            window.location.href = "/pages/newlink" + '#' + row.id;
+            e.preventDefault();
+        },
+
+        'click .remove' : function (e, value, row, index) {
+
+            $table.bootstrapTable('remove', {
+
+                field: 'id',
+                values: [row.id]
+            });
+
+            var arr = [];
+            arr.push(row.id);
+
+            deleteLinks(arr);
+        }
+    };
+
+    function initTable() {
+
+
+    }
+
+    function getIdSelections() {
+
+        return $.map($table.bootstrapTable('getSelections'), function(row) {
+            return row.id;
+        });
+
+    }
+
+    function deleteLinks(ids){
+
+            var params = {
+                "linkids":ids
+            };
+
+            $.ajax({
+                type:'POST',
+                data: JSON.stringify(params),
+                contentType:'application/json',
+                url:'/pages/links/delete',
+                error: function(error) {
+                    alert("error is occurred=="+error);
+                },
+                dataType:'json',
+                success: function(data) {
+
+                    console.log(data);
+                    // window.location.href = '/pages/links';
+                },
+            });
+        }
+
+
+    $(document).ready( function() {
+
+        //delete link
+
+        
+
+        function Link(id, title, alert, keywords, categories, sources, start_date, end_date) {
+
+                this.id = id;
+                this.title = title;
+                this.alert = alert;
+                this.keywords = keywords;
+                this.categories = categories;
+                this.sources = sources;
+
+                var startDate = new Date(start_date);
+                
+                this.start_date = moment(startDate).format("MMM Do YY");
+
+                var endDate = new Date(end_date);
+
+                this.end_date = moment(endDate).format("MMM Do YY");;
+        }
+
+        window.onload = function() {
+
+            //Hidden id Columns
+
+            // $('#demo-custom-toolbar .linkId').hide();
+
+
+
+            $table.on('check.bs.table uncheck.bs.table ' +
+                'check-all.bs.table uncheck-all.bs.table', function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+                // save your data, here just save the current page
+                selections = getIdSelections();
+
+                $.each(selections, function(i, row){
+
+                    console.log("selected index is ----"+ row);
+
+                });
+                // push or splice the selections if you want to save all data selections
+            });
+
+            $table.on('all.bs.table', function (e, name, args) {
+                // console.log(name, args);
+            });
+            $remove.click(function () {
+
+                 var ids = getIdSelections();
+                
+                $.each(ids, function(i, row){
+
+                    console.log("selected id is ----"+ row);
+
+                });                
+                $table.bootstrapTable('remove', {
+                    field: 'id',
+                    values: ids
+                });
+                $remove.prop('disabled', true);
+
+                deleteLinks(ids);
+                
+            });
+
+            // $(window).resize(function () {
+            //     $table.bootstrapTable('resetView', {
+            //         height: getHeight()
+            //     });
+            // });
+
+            // $('#demo-custom-toolbar').on('check.bs.table', function (e, row, $el) {
+            //     alert('check index: ' + $el.closest('tr').data('index'));
+            //     selectedLinkId = 
+            // });
+            // $('#demo-custom-toolbar').on('uncheck.bs.table', function (e, row, $el) {
+            //     alert('uncheck index: ' + $el.closest('tr').data('index'));
+            // });
+
+            $.post('/pages/links', function(data) {
+
+                    $("#searchTblBody").empty();
+                    //  window.location.href = "/pages/links";
+
+                    console.log("data count is : " + data.length);
+                    var array = [];
+                    for (var i = 0; i < data.length; i++) {
+
+                        var temp = data[i];
+                        var link = new Link(temp._id, temp.title,  temp.alert, temp.keywords, temp.categories,temp.sources, temp.start_date, temp.end_date);
+
+                        var tr = {
+
+                            id: link.id,
+                            title: link.title,
+                            date: link.start_date,
+                        };
+
+                        array.push(tr);
+                        // var tr  = '<tr>	<td class = "bs-checkboxs"><input data-index='+i+' name = "btSelectItem" type = "checkbox"></td> <td>'+ link.title + '</td> <td>'+ link.start_date +'</td> <td><a href="#" class="table-action-btn"><i class="md md-edit"></i></a> <a href="#" class="table-action-btn"><i class="md md-close"></i></a>  </td>	</tr>';
+
+                        // $("#searchTblBody").append(tr);
+                    }
+
+
+                    $('#demo-custom-toolbar').bootstrapTable({
+                        data: array
+                    });
+
+                    // $('#demo-custom-toolbar .linkId').hide();
+                    
+            });
+        };
+    });
+</script>
+
+
+<% include ../../html/html_end %>

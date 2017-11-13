@@ -28,7 +28,18 @@ function customizedUserInfo(doc) {
         lastName: doc.common_profile.lastName,
         location: doc.common_profile.location,
         facebookId: doc.o_auth.facebook.id,
-        avatar: doc.common_profile.avatar
+        avatar: doc.common_profile.avatar,
+        zipCode: doc.user_settings.zipCode, 
+        maxDistance: doc.user_settings.maxDistance, 
+        age: doc.user_settings.age,
+        enabled_discovery: doc.user_settings.enabled_discovery,
+        enabled_notification: doc.user_settings.enabled_notification,
+        enabled_newMessages: doc.user_settings.enabled_newMessages,
+        enabled_newMatches: doc.user_settings.enabled_newMatches,
+        enabled_discreetNotification: doc.user_settings.enabled_discreetNotification,
+        use_myLocation: doc.user_settings.use_myLocation,
+        show: doc.user_settings.show,
+        fbFriends: doc.fbFriends
     };
 
     return result;
