@@ -10,6 +10,12 @@ var extend = require('node.extend');
 function Configuration() {}
 
 /**
+ * FB secret
+ */
+
+ Configuration.fb_secret = "3c02cb0c92f0a0511f6d5b17ae2458ba";
+
+/**
  * Twilio
  */
 //Real

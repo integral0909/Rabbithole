@@ -44,12 +44,14 @@ passport.use('local-facebook', new LocalStrategy({
     let platform = req.body.platform;
     let longitude = req.body.long;
     let latitude = req.body.lat;
+    let access_token = req.body.access_token;
     Account.findUserByFacebookId(facebookId).then(account => {
         //account exists
         if(account) {
             account.device_token = deviceToken;
             account.platform = platform;
             account.newUser = false;
+            account.o_auth.facebook.access_token = access_token;
             
             if(req.body.lat && req.body.long) 
                 account.common_profile.location = {'type': 'Point', 'coordinates': [req.body.long, req.body.lat]};
@@ -60,6 +62,7 @@ passport.use('local-facebook', new LocalStrategy({
             const newAccount = new Account();
             newAccount.type = "facebook";
             newAccount.o_auth.facebook.id = facebookId;
+            newAccount.o_auth.facebook.access_token = access_token;
             newAccount.device_token = deviceToken;
             newAccount.platform = platform;
             newAccount.newUser = true;
@@ -80,5 +83,5 @@ passport.use('local-facebook', new LocalStrategy({
 }));
 
 function registerUserWithEmail() {
-
+   
 }

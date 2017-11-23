@@ -4,6 +4,7 @@ import PassportError from './../passport/PassportError.js';
 import ResponseResult from './../helpers/response-result.js';
 var inspector = require('schema-inspector');
 var  Account = require('./../models/account.js');
+var graph = require('fbgraph');
 
 const router = express.Router();
 
@@ -33,11 +34,42 @@ router.post('/update_fbFriends', (req, res, next) => {
 });
 
 /**
+ * Find mutual friends
+ */
+
+ router.post('/find_mutual_friends', (req, res, next) => {
+    const userId = req.headers['user-id'];
+    const access_token = req.body.access_token;
+    Account.findById(userId).then(account => {
+        if (account) {
+            graph.setAccessToken(access_token);
+            users.forEach(function(account) {
+                graph.get('/' + account.o_auth.facebook.id ,{fields: 'context.fields(all_mutual_friends.limit(500))' }, (response => {
+                    if (!response.context) {
+                        console.log(JSON.stringify(response));                    
+                        return res.status(404).json(ResponseResult.getResoponseResult(JSON.stringify(response), 0, 'User not found')); 
+                    }
+                    if (!response.context.all_mutual_friends) 
+                        return res.status(404).json(ResponseResult.getResoponseResult({}, 0, 'Unable to find mutual friends.')); 
+                    console.log(JSON.stringify(response));
+                    var friends = response.context.all_mutual_friends.data;
+                    var responseData = [];
+                    console.log("count is => ", friends.length);
+                    
+                    res.json(ResponseResult.getResoponseResult(friends, 1, "successfully found mutual friends"));    
+                }));
+            }, this);
+            
+        }
+    });
+ });
+
+/**
  * Get count of female users
  */
 
  router.post('/female_count', (req, res, next) => {
-    const userId = req.headers['user_id']; 
+    const userId = req.headers['user-id']; 
     Account.countOfSpecialGenderUsers(0).then((count) => {
         console.log("Number of users : ", count);
         res.json(ResponseResult.getResoponseResult({count: count}, 1, "success"));        
@@ -49,7 +81,7 @@ router.post('/update_fbFriends', (req, res, next) => {
   */
 
   router.post('/update_user_settingss', (req, res, next) => {
-    const userId = req.headers['user_id'];
+    const userId = req.headers['user-id'];
 
     const zipCode = req.body.zipCode;
     const maxDistance = req.body.maxDistance;

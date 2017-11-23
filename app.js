@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var schedule = require('./utils/schedule');
 require('./passport');// setup passport
 
 // set global objects
@@ -77,8 +78,7 @@ function RabbitHole(config) {
 
         console.log(i + " =>  multiple <=");
         sockets.initialize(app, server, io);
-
-        
+        schedule.performJobUpdateMatchUsers();        
     };
 
     this.connectMongoDB = () => {

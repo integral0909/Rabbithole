@@ -6,13 +6,14 @@ var Schema = mongoose.Schema;
 const type = "facebook email".split(' ');
 
 const Account = new Schema({
+    isPremium: {type: Boolean, default: false},
     type : {type: String, enum : type},    
     username: {type: String, default: 'none'},
     newUser: { type: Boolean, default: false },
     isFlagged: {type: Boolean, default: false},
     isVerified: {type: Boolean, default: false},
     device_token:String,
-    platform: {type: Number, required: true,default: 1}, //  1: iOS , 2: Android , 3: Web
+    platform: {type: Number, required: true, default: 1}, //  1: iOS , 2: Android , 3: Web
     common_profile: {        
         phone_number: String,
         email: String,
@@ -44,8 +45,8 @@ const Account = new Schema({
     },
     o_auth: {
         facebook:{
-            id: String,
-            access_token: String
+            id: {type: String, required: true},
+            access_token: {type: String, required: true}
         }
     },
     fbFriends: [{
@@ -54,6 +55,10 @@ const Account = new Schema({
         lastname: { type: String, default: "" },
         name: { type: String, default: '' },
         picture: { type: String, default: 'none' },
+    }],
+    matchedUsers: [{
+        type: Schema.Types.ObjectId, 
+        ref: 'Account'
     }]
 
 });
@@ -91,19 +96,30 @@ Account.statics.countOfSpecialGenderUsers = function(gender) {
 }
 
 // Case 1: Find match users : gender -> gender , show -> show
-Account.statics.findMatchedUsersInCaseOne = function(value) {
+Account.statics.findMatchedUsersInCaseOne = function(value, myId) {
     return this.find({
-        $and: [{'common_profile.gender' : value}, {'user_settings.show': value}]
-    })
-    .exe();
-}
-// Case 2: Find match users : gender -> 1-gender , show -> show
-Account.statics.findMatchedUsersInCaseTwo = function(value) {
-    return this.find({
-        $and: [{'common_profile.gender' : 1 - value}, {'user_settings.show': value}]
+        $and: [{'common_profile.gender' : value}, {'user_settings.show': value}, {'_id': {$ne: myId}}]
     })
     .exec();
 }
+// Case 2: Find match users : gender -> 1-gender , show -> show
+Account.statics.findMatchedUsersInCaseTwo = function(value, myId) {
+    return this.find({
+        $and: [{'common_profile.gender' : 1 - value}, {'user_settings.show': value}, {'_id': {$ne: myId}}]
+    })
+    .exec();
+}
+// update matched users
+
+Account.statics.updateMatchedUsers = function(myId, users) {
+    this.findByIdAndUpdate(myId,
+        {
+            $push: { matchedUsers: { $each: users}}
+        },
+        {safe: true, upsert: true, new: true, multi: true })
+        .exec();    
+}
+
 
 // Find User by
 
