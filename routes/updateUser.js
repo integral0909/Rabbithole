@@ -19,8 +19,8 @@ router.post('/update_username', (req, res, next) => {
     Account.findByIdAndUpdate(userId,
         {
             $set: {username: username, isVerified: true},
-        })
-        .then (account =>{
+        },
+        {safe: true, upsert: true, new: true, multi: true }).then (account =>{
             if (account) {
                 res.json(ResponseResult.getResoponseResult(ResponseResult.customizedUserInfo(account), 1, "success"));
             }else {
