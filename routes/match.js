@@ -38,7 +38,7 @@ router.post('/match_users', (req, res) => {
                             // findUserArray.push.apply(findUserArray, res1);                        
                             sendRequestToFB(account._id, res1, req, res);
                         }else {
-                            res.json(ResponseResult.getResoponseResult({}, 1, "Not found any matched user"));   
+                            res.json(ResponseResult.getResoponseResult({}, 2, "Not found any matched user"));   
                         }
                     });
                 }else if (gender == 1 - show) {
@@ -47,7 +47,7 @@ router.post('/match_users', (req, res) => {
                         if (res2.length > 0) {
                             sendRequestToFB(account._id, res2, req, res);
                         }else {
-                            res.json(ResponseResult.getResoponseResult({}, 1, "Not found any matched user"));   
+                            res.json(ResponseResult.getResoponseResult({}, 2, "Not found any matched user"));   
                         }
                     });
                 }   
