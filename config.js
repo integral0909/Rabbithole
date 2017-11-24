@@ -13,7 +13,8 @@ function Configuration() {}
  * FB secret
  */
 
- Configuration.fb_secret = "3c02cb0c92f0a0511f6d5b17ae2458ba";
+//  Configuration.fb_secret = "3c02cb0c92f0a0511f6d5b17ae2458ba";
+ Configuration.fb_secret = "342e813b0bce0585d84e4e729750544d";
 
 /**
  * Twilio
