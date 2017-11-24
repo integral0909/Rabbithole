@@ -46,7 +46,8 @@ const Account = new Schema({
     o_auth: {
         facebook:{
             id: {type: String, required: true},
-            access_token: {type: String, required: true}
+            access_token: {type: String, required: true},
+            picture: { type: String, default: '' },
         }
     },
     fbFriends: [{
@@ -95,6 +96,14 @@ Account.statics.countOfSpecialGenderUsers = function(gender) {
     return this.count({'common_profile.gender': gender}).exec();
 }
 
+// Find mutual friends
+
+Account.statics.findMutualFriends = function(id) {
+    return  this.findById(id)
+                .populate('matchedUsers')
+                .exec();
+}
+
 // Case 1: Find match users : gender -> gender , show -> show
 Account.statics.findMatchedUsersInCaseOne = function(value, myId) {
     return this.find({
@@ -114,9 +123,8 @@ Account.statics.findMatchedUsersInCaseTwo = function(value, myId) {
 Account.statics.updateMatchedUsers = function(myId, users) {
     this.findByIdAndUpdate(myId,
         {
-            $push: { matchedUsers: { $each: users}}
-        },
-        {safe: true, upsert: true, new: true, multi: true })
+            $addToSet: { matchedUsers: { $each: users}}
+        })
         .exec();    
 }
 

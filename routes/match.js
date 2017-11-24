@@ -2,6 +2,7 @@ var express  = require("express");
 var  passport = require('passport');
 import PassportError from './../passport/PassportError.js';
 import ResponseResult from './../helpers/response-result.js';
+import { Response } from "aws-sdk/lib/response";
 var inspector = require('schema-inspector');
 var  Account = require('./../models/account.js');
 var graph = require('fbgraph');
@@ -16,32 +17,42 @@ router.post('/match_users', (req, res) => {
     const userId = req.headers['user-id'];
     const access_token = req.body.access_token;
     var findUserArray = [];
-    Account.findById(userId).then((account) => {
+    Account.findMutualFriends(userId).then((account) => {
         if (account) {
-            graph.setAccessToken(access_token);
-            graph.setAppSecret(config.fb_secret);
-            var gender = account.common_profile.gender; // 0: woman , 1: man 
-            var show = account.user_settings.show; // 0: only women, 1: only women, 2: both of men and women
-           
-            if (gender == show) {
-                Account.findMatchedUsersInCaseOne(gender, account._id).then((res1) => {
-                    if (res1.length > 0 ){
-                        // findUserArray.push.apply(findUserArray, res1);                        
-                        sendRequestToFB(account._id, res1, req, res);
-                    }else {
-                        res.json(ResponseResult.getResoponseResult({}, 1, "Not found any matched user"));   
-                    }
+            if (account.matchedUsers.length > 0) {
+                console.log("from cache list");
+                account.matchedUsers.forEach(user => {
+                    findUserArray.push(ResponseResult.customizedUserInfo(user));
                 });
-            }else if (gender == 1 - show) {
-                console.log("finding...");
-                Account.findMatchedUsersInCaseTwo(gender, account._id).then((res2) => {
-                    if (res2.length > 0) {
-                        sendRequestToFB(account._id, res2, req, res);
-                    }else {
-                        res.json(ResponseResult.getResoponseResult({}, 1, "Not found any matched user"));   
-                    }
-                });
-            }               
+
+                res.json(ResponseResult.getResoponseResult(findUserArray, 1, "Found matched user")); 
+            }else {
+                graph.setAccessToken(access_token);
+                graph.setAppSecret(config.fb_secret);
+                var gender = account.common_profile.gender; // 0: woman , 1: man 
+                var show = account.user_settings.show; // 0: only women, 1: only women, 2: both of men and women
+               
+                if (gender == show) {
+                    Account.findMatchedUsersInCaseOne(gender, account._id).then((res1) => {
+                        if (res1.length > 0 ){
+                            // findUserArray.push.apply(findUserArray, res1);                        
+                            sendRequestToFB(account._id, res1, req, res);
+                        }else {
+                            res.json(ResponseResult.getResoponseResult({}, 1, "Not found any matched user"));   
+                        }
+                    });
+                }else if (gender == 1 - show) {
+                    console.log("finding...");
+                    Account.findMatchedUsersInCaseTwo(gender, account._id).then((res2) => {
+                        if (res2.length > 0) {
+                            sendRequestToFB(account._id, res2, req, res);
+                        }else {
+                            res.json(ResponseResult.getResoponseResult({}, 1, "Not found any matched user"));   
+                        }
+                    });
+                }   
+
+            }                        
         }else {
             return res.status(404).json(ResponseResult.getResoponseResult({}, 0, 'User not found.')); 
         }
@@ -76,7 +87,7 @@ function sendRequestToFB(myId, results, req, res) {
                         }
                         if (response.context.all_mutual_friends.summary) {
                             var friend_count = response.context.all_mutual_friends.summary.total_count;
-                            if (friend_count == 0) {
+                            if (friend_count > 0) {
                                 foundUsers.push(ResponseResult.customizedUserInfo(user));
                                 matchUsers.push(user._id);
                             }                
