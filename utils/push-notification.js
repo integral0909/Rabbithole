@@ -33,7 +33,7 @@ exports.sendPush = async function(tokenArray, message, platform, type, receiver,
     if (!account) {
         return res
                 .status(404)
-                .json(ResponseResult.getResoponseResult({}, 0, "User not found"));
+                .json(ResponseResult.getResponseResult({}, 0, "User not found"));
     }
     var note = new apn.Notification();
     note.expiry = Math.floor(Date.now() / 1000) + 3600; //Expires 1 hour from now

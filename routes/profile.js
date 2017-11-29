@@ -22,9 +22,9 @@ router.post('/update_username', (req, res, next) => {
         },
         {safe: true, upsert: true, new: true, multi: true }).then (account =>{
             if (account) {
-                res.json(ResponseResult.getResoponseResult(ResponseResult.customizedUserInfo(account), 1, "success"));
+                res.json(ResponseResult.getResponseResult(ResponseResult.customizedUserInfo(account), 1, "success"));
             }else {
-                return res.status(404).json(ResponseResult.getResoponseResult({}, 0, 'User not found')); 
+                return res.status(404).json(ResponseResult.getResponseResult({}, 0, 'User not found')); 
             }
     });
        
@@ -44,16 +44,16 @@ router.post('/update_username', (req, res, next) => {
                 graph.get('/' + account.o_auth.facebook.id ,{fields: 'context.fields(all_mutual_friends.limit(500))' }, (response => {
                     if (!response.context) {
                         console.log(JSON.stringify(response));                    
-                        return res.status(404).json(ResponseResult.getResoponseResult(JSON.stringify(response), 0, 'User not found')); 
+                        return res.status(404).json(ResponseResult.getResponseResult(JSON.stringify(response), 0, 'User not found')); 
                     }
                     if (!response.context.all_mutual_friends) 
-                        return res.status(404).json(ResponseResult.getResoponseResult({}, 0, 'Unable to find mutual friends.')); 
+                        return res.status(404).json(ResponseResult.getResponseResult({}, 0, 'Unable to find mutual friends.')); 
                     console.log(JSON.stringify(response));
                     var friends = response.context.all_mutual_friends.data;
                     var responseData = [];
                     console.log("count is => ", friends.length);
                     
-                    res.json(ResponseResult.getResoponseResult(friends, 1, "successfully found mutual friends"));    
+                    res.json(ResponseResult.getResponseResult(friends, 1, "successfully found mutual friends"));    
                 }));
             }, this);
             
@@ -69,9 +69,34 @@ router.post('/update_username', (req, res, next) => {
     const userId = req.headers['user-id']; 
     Account.countOfSpecialGenderUsers(0).then((count) => {
         console.log("Number of users : ", count);
-        res.json(ResponseResult.getResoponseResult({count: count}, 1, "success"));        
+        res.json(ResponseResult.getResponseResult({count: count}, 1, "success"));        
     });
  });
+
+ /**
+  * Update user photo
+  */
+  router.patch('/update_avatar', (req, res, next) => {
+    const userId = req.headers['user-id'];
+    const avatar = req.body.avatar;
+    console.log("avatar -> ", avatar);
+
+    Account.findByIdAndUpdate(userId,
+        {
+            $set: {
+                'common_profile.avatar': avatar,
+                isVerified: true              
+            }
+        },
+        {safe: true, upsert: true, new: true, multi: true }).then (account =>{
+
+            if (account) {
+                res.json(ResponseResult.getResponseResult(ResponseResult.customizedUserInfo(account), 1, "success"));
+            }else {
+                return res.status(404).json(ResponseResult.getResponseResult({}, 0, 'User not found')); 
+            }
+    });
+  });
 
  /**
   * Update user settings
@@ -110,9 +135,9 @@ router.post('/update_username', (req, res, next) => {
         {safe: true, upsert: true, new: true, multi: true }).then (account =>{
 
             if (account) {
-                res.json(ResponseResult.getResoponseResult(ResponseResult.customizedUserInfo(account), 1, "success"));
+                res.json(ResponseResult.getResponseResult(ResponseResult.customizedUserInfo(account), 1, "success"));
             }else {
-                return res.status(404).json(ResponseResult.getResoponseResult({}, 0, 'User not found')); 
+                return res.status(404).json(ResponseResult.getResponseResult({}, 0, 'User not found')); 
             }
 
     });

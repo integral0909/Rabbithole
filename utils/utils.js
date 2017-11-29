@@ -22,6 +22,10 @@ exports.uid = function(len) {
   return buf.join('');
 };
 
+exports.getMeters = function (value) {
+  return value * 1609.344;
+}
+
 exports.random = function (howMany, chars) {
     chars = chars
         || "0123456789";

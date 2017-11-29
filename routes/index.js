@@ -2,12 +2,12 @@ var express = require('express');
 const router = express.Router();
 
 var auth = require('./auth');
-var updateUser = require('./updateUser');
+var profile = require('./profile');
 var test_reg  = require('./test_register');
 var match = require('./match');
 
 router.use(Uri('auth'), auth);
-router.use(Uri('updateUser'), updateUser);
+router.use(Uri('profile'), profile);
 router.use(Uri('test_register'), test_reg);
 router.use(Uri('match'), match);
 /* GET home page. */

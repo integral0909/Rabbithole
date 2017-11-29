@@ -1,13 +1,21 @@
-// exports.getResoponseResult = getResoponseResult;
-exports.getResoponseResult = getResoponseResult;
+// exports.getResponseResult = getResponseResult;
+exports.getResponseResult = getResponseResult;
 
-function getResoponseResult(data , success, error) {
+function getResponseResult(data , success, error, count = 0, total = 0, page = 0, pages = 0, limit = 20 ) {
 
     var result = {};
 
     result["data"] = data;
     result["success"] = success;
     result["error"] = error;
+    var hasMore = false;
+    if (total > page * limit) {
+        hasMore = true;
+    }
+    result["hasMore"] = hasMore;
+    result["page"] = parseInt(page);
+    result["total"] = parseInt(total);
+    result["pageCount"] = parseInt(pages);
 
     return result; 
 }
@@ -17,6 +25,7 @@ exports.customizedUserInfo = customizedUserInfo;
 function customizedUserInfo(doc) {
     var result  = {
         _id: doc._id.toString(),
+        isPremium: doc.isPremium,
         type: doc.type,
         username: doc.username,
         email: doc.common_profile.email,
@@ -31,7 +40,7 @@ function customizedUserInfo(doc) {
         avatar: doc.common_profile.avatar,
         zipCode: doc.user_settings.zipCode, 
         maxDistance: doc.user_settings.maxDistance, 
-        age: doc.user_settings.age,
+        age: doc.common_profile.age,
         enabled_discovery: doc.user_settings.enabled_discovery,
         enabled_notification: doc.user_settings.enabled_notification,
         enabled_newMessages: doc.user_settings.enabled_newMessages,

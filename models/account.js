@@ -1,5 +1,7 @@
 // var mongoose = require('mongoose');
 import mongoose from 'mongoose';
+var mongoosePaginate = require('mongoose-paginate');
+var uniqueValidator = require('mongoose-unique-validator');
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
@@ -21,7 +23,7 @@ const Account = new Schema({
         lastName: { type: String, default: "" },
         gender: { type: Number, default: -1 }, //1: Male , 0: Female, -1: None
         avatar: { type: String, default: 'none' },
-        age: {type: Number, min: 18, max: 65 },
+        age: {type: Number, min: 18, max: 65, default: 20 },
         location: {
             type: {type: String, default: 'Point'},
             coordinates: [Number]
@@ -45,7 +47,7 @@ const Account = new Schema({
     },
     o_auth: {
         facebook:{
-            id: {type: String, required: true},
+            id: {type: String, required: true, unique: true},
             access_token: {type: String, required: true},
             picture: { type: String, default: '' },
         }
@@ -63,6 +65,9 @@ const Account = new Schema({
     }]
 
 });
+
+Account.plugin(mongoosePaginate);
+Account.plugin(uniqueValidator);
 
 // Static methods
 
@@ -98,7 +103,7 @@ Account.statics.countOfSpecialGenderUsers = function(gender) {
 
 // Find mutual friends
 
-Account.statics.findMutualFriends = function(id) {
+Account.statics.findMatchedUsersFromCache = function(id) {
     return  this.findById(id)
                 .populate('matchedUsers')
                 .exec();
@@ -112,11 +117,46 @@ Account.statics.findMatchedUsersInCaseOne = function(value, myId) {
     .exec();
 }
 // Case 2: Find match users : gender -> 1-gender , show -> show
-Account.statics.findMatchedUsersInCaseTwo = function(value, myId) {
-    return this.find({
-        $and: [{'common_profile.gender' : 1 - value}, {'user_settings.show': value}, {'_id': {$ne: myId}}]
-    })
-    .exec();
+Account.statics.findMatchedUsersInCase = function(gender, lookingFor, myId, limit, minAge, maxAge,coords, maxDistance,pageNum) {
+    // return this.find({
+    //     $and: [
+    //         {'common_profile.gender' : gender},
+    //         {'user_settings.show': lookingFor},
+    //         {'_id': {$ne: myId}},
+    //         {'common_profile.gender.age': { $gt: minAge, $lt: maxAge }},
+    //         {'common_profile.location': {
+    //             $near:
+    //             {
+    //                 $geometry: {
+    //                     type: "Point",
+    //                     coordinates: coords
+    //                 },
+    //                 $maxDistance: maxDistance
+    //             }                   
+    //         }
+    //     }
+    // ]})
+    // .limit(limit).exec();
+
+    return this.paginate({
+        $and: [
+            {'common_profile.gender' : lookingFor},
+            {'user_settings.show': gender},
+            {'_id': {$ne: myId}},
+            {'isVerified': true},
+            {'common_profile.age': { $gt: minAge, $lt: maxAge }},
+            {'common_profile.location': {
+                $near:
+                {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: coords
+                    },
+                    $maxDistance: maxDistance
+                }                   
+            }
+        }
+    ]}, {page: pageNum, limit: limit});
 }
 // update matched users
 
@@ -125,7 +165,16 @@ Account.statics.updateMatchedUsers = function(myId, users) {
         {
             $addToSet: { matchedUsers: { $each: users}}
         })
+        // .populate('matchedUsers')
+        .lean()
         .exec();    
+}
+
+// Find premium users
+
+Account.statics.findPremiumUsers = function() {
+    this.find({isPremium: true})
+        .exec();
 }
 
 
@@ -146,5 +195,5 @@ Account.statics.search = function(username) {
     
 }
 //
-
+Account.index({ 'common_profile.location': '2dsphere' });
 module.exports = mongoose.model('Account', Account);

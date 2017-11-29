@@ -9,6 +9,7 @@ var extend = require('node.extend');
 
 function Configuration() {}
 
+Configuration.cronQueryLimitForPremium = 100;
 /**
  * FB secret
  */
