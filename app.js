@@ -19,6 +19,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var sockets = require('./socket/sockets');
 var oauth2Router = require('./oauth2_server/router');
+var client = require('./models/client');
 
 var app = express();
 app.use(function (req, res, next) {
@@ -87,10 +88,21 @@ function RabbitHole(config) {
         db.once('open', function() {
             console.log("[INFO] connection to the database established");
         });
-
+        mongoose.Promise = global.Promise;
         mongoose.connect(config.db.type + '://' + config.db.servers[0] + '/' + config.db.name, function(err, db) {
             if (!err) {
                 console.log("We are connected");
+                // var cl = new client({
+                //     name: "Test",
+                //     id: "id",
+                //     secret: "sdfadfdfwerwer",
+                //     userId: "136"
+                // });
+                // cl.save();
+                client.findByUserId('136').then(clients => {
+                    console.log(clients);
+                });
+
             } else {
                 console.log(err);
             }

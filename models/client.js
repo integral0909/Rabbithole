@@ -9,5 +9,9 @@ var ClientSchema = new mongoose.Schema({
   userId: { type: String, required: true }
 });
 
+ClientSchema.statics.findByUserId = function(userId) {
+  return this.find({userId: userId}).exec();
+}
+
 // Export the Mongoose model
 module.exports = mongoose.model('Client', ClientSchema);
